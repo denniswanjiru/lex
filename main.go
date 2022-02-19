@@ -66,27 +66,45 @@ func getDefination(cmd *flag.FlagSet, w *string) {
 		log.Fatalln(err)
 	}
 
-	fmt.Printf("%s \n \n", jsonBytes[0].Word)
+	fmt.Printf("%s %s \n", jsonBytes[0].Word, jsonBytes[0].Phonetics[0].Text)
 
 	for i := 0; i < len(jsonBytes[0].Meanings); i++ {
 		res := jsonBytes[0].Meanings[i]
 
-		fmt.Printf("%s \n", string(res.PartOfSpeech))
-		fmt.Printf("\n   %s \n \n", res.Definitions[0].Definition)
+		fmt.Printf("\n %s \n", string(res.PartOfSpeech))
+
+		for j := 0; j < len(res.Definitions); j++ {
+			fmt.Printf("\n   %d. %s \n", j+1, res.Definitions[j].Definition)
+
+			if res.Definitions[j].Example != "" {
+				fmt.Printf("\n \t- Example: %s \n", res.Definitions[j].Example)
+			}
+
+			if j == 2 {
+				j = len(res.Definitions)
+			}
+		}
 	}
+
+	fmt.Println()
 
 }
 
 func getPronunciation(cmd *flag.FlagSet, w *string) {
+	fmt.Printf("%s \n", string(*w))
 	fmt.Println("Coming soon!")
 }
 
+var word string
+
 func main() {
 	defineCmd := flag.NewFlagSet("define", flag.ExitOnError)
-	word := defineCmd.String("w", "", "Word to be defined")
+	defineCmd.StringVar(&word, "w", "", "Word to be defined")
+	defineCmd.StringVar(&word, "word", "", "Word to be defined")
 
 	pronounceCmd := flag.NewFlagSet("pronounce", flag.ExitOnError)
-	pWord := pronounceCmd.String("w", "", "Word to be pronounced")
+	pronounceCmd.StringVar(&word, "w", "", "Word to be pronounced")
+	pronounceCmd.StringVar(&word, "word", "", "Word to be pronounced")
 
 	if len(os.Args) < 2 {
 		// call help func
@@ -96,10 +114,10 @@ func main() {
 
 	switch os.Args[1] {
 	case "define":
-		getDefination(defineCmd, word)
+		getDefination(defineCmd, &word)
 		return
 	case "pronounce":
-		getPronunciation(pronounceCmd, pWord)
+		getPronunciation(pronounceCmd, &word)
 		return
 	default:
 		// call help func
