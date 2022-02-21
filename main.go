@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/denniswanjiru/lex/cmd/define"
+	"github.com/denniswanjiru/lex/define"
 )
 
 func getPronunciation(cmd *flag.FlagSet, w *string) {
