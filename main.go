@@ -5,13 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/denniswanjiru/lex/define"
+	"github.com/denniswanjiru/lex/cmd/define"
+	"github.com/denniswanjiru/lex/cmd/pronounce"
 )
-
-func getPronunciation(cmd *flag.FlagSet, w *string) {
-	fmt.Printf("%s \n", string(*w))
-	fmt.Println("Coming soon!")
-}
 
 var word string
 
@@ -35,7 +31,7 @@ func main() {
 		define.WordDefination(defineCmd, &word)
 		return
 	case "pronounce":
-		getPronunciation(pronounceCmd, &word)
+		pronounce.WordPronunciation(pronounceCmd, &word)
 		return
 	default:
 		// call help func
